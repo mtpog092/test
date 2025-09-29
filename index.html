@@ -224,7 +224,7 @@
     <div id="progressBar"><div></div></div>
     <span class="prize" data-score="2">🎁<span class="tooltip">Ganhaste um abraço</span></span>
     <span class="prize" data-score="4">🎉<span class="tooltip">Ganhaste um beijinho</span></span>
-    <span class="prize" data-score="6">🏆<span class="tooltip">Prémio Final</span></span>
+    <span class="prize" data-score="6">🏆<span class="tooltip">Prémio Finaaaaaal</span></span>
   </div>
 
   <div id="quizContainer">
@@ -310,8 +310,9 @@ function updateProgress() {
 function checkAnswer(i) {
     const buttons = document.querySelectorAll('.answer-btn');
 
+    // Limpa classes anteriores
     buttons.forEach((btn, index) => {
-        btn.classList.remove('correct', 'wrong'); // Remove todas as classes antes
+        btn.classList.remove('correct', 'wrong');
         if (index === i) {
             if (i === quiz[current].correct) {
                 btn.classList.add('correct');
@@ -320,6 +321,19 @@ function checkAnswer(i) {
             }
         }
     });
+
+    // Mensagem de erro personalizada para a última pergunta
+    if (current === quiz.length - 1 && i !== quiz[current].correct) {
+        let msg = '';
+        switch (i) {
+            case 1: msg = "Às vezes só, mas ainda não é a certa"; break; // "Os dois"
+            case 2: msg = "Vá, não somos assim tão seca"; break; // "Nenhum"
+            case 3: msg = "Looooooooool, escolhe lá a certa bro"; break; // "Bia"
+            default: msg = "Ops! Está errado. Tenta outra vez 💖";
+        }
+        showError(msg);
+        return; // Para não avançar para a próxima pergunta
+    }
 
     if (i === quiz[current].correct) {
         score++;
@@ -335,12 +349,12 @@ function checkAnswer(i) {
                 video.style.display = 'block';
             }
         }, 400);
-
     } else {
         showError("Ops! Está errado. Tenta outra vez 💖");
         buttons.forEach(btn => btn.disabled = false);
     }
 }
+
 
 function showError(msg) {
   errorMessage.textContent = msg;
