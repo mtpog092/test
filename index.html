@@ -269,27 +269,28 @@
     const prizeElements = document.querySelectorAll('.prize');
 
     function showQuestion() {
-      const q = quiz[current];
-      questionEl.textContent = q.q;
-      answersEl.innerHTML = '';
-      errorMessage.classList.remove('show');
+  const q = quiz[current];
+  questionEl.textContent = q.q;
+  answersEl.innerHTML = '';
+  errorMessage.classList.remove('show');
 
-      q.a.forEach((ans, i) => {
-        const btn = document.createElement('button');
-        btn.textContent = ans;
-        btn.className = 'answer-btn';
-        btn.addEventListener('click', (e) => {
-          checkAnswer(i);
-          e.target.blur(); // remove o foco no telemóvel
-        });
-        answersEl.appendChild(btn);
-      });
+  q.a.forEach((ans, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = ans;
+    btn.className = 'answer-btn';
+    btn.addEventListener('click', (e) => {
+      checkAnswer(i);
+      e.target.blur(); // desfoca imediatamente
+    });
+    answersEl.appendChild(btn);
+  });
 
-      // Forçar remoção de foco residual
-      setTimeout(() => {
-        document.activeElement.blur();
-      }, 50);
-    }
+  // Assim que inserir as novas respostas, remove foco de qualquer elemento
+  requestAnimationFrame(() => {
+    if (document.activeElement) document.activeElement.blur();
+  });
+}
+
 
     function updateProgress() {
       const percent = (score / quiz.length) * 100;
