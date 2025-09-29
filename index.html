@@ -252,109 +252,113 @@
   </div>
 
   <script>
-    const quiz = [
-      { q: "Onde foi o nosso primeiro encontro?", a: ["Num café","No cinema","Ao ar livre","Num restaurante"], correct: 2 },
-      { q: "Quem é o mais chato da relação?", a: ["Bia","Ruben","Os dois","Nenhum"], correct: 0 },
-      { q: "Em que ano começámos a namorar", a: ["2021","2022","2023","2024"], correct: 2 },
-      { q: "Quem é o mais ciumento?", a: ["Nenhum","Os dois","Bia","Ruben"], correct: 2 },
-      { q: "Qual foi a nossa primeira viagem?", a: ["Viena","Tailândia","Roma","Barcelona"], correct: 3 },
-      { q: "Quem é o mais engraçado?", a: ["Ruben","Os dois","Nenhum","Bia"], correct: 0 }
-    ];
+const quiz = [
+  { q: "Onde foi o nosso primeiro encontro?", a: ["Num café","No cinema","Ao ar livre","Num restaurante"], correct: 2 },
+  { q: "Quem é o mais chato da relação?", a: ["Bia","Ruben","Os dois","Nenhum"], correct: 0 },
+  { q: "Em que ano começámos a namorar", a: ["2021","2022","2023","2024"], correct: 2 },
+  { q: "Quem é o mais ciumento?", a: ["Nenhum","Os dois","Bia","Ruben"], correct: 2 },
+  { q: "Qual foi a nossa primeira viagem?", a: ["Viena","Tailândia","Roma","Barcelona"], correct: 3 },
+  { q: "Quem é o mais engraçado?", a: ["Ruben","Os dois","Nenhum","Bia"], correct: 0 }
+];
 
-    let current = 0;
-    let score = 0;
+let current = 0;
+let score = 0;
 
-    const questionEl = document.getElementById('question');
-    const answersEl = document.getElementById('answers');
-    const quizContainer = document.getElementById('quizContainer');
-    const errorMessage = document.getElementById('errorMessage');
-    const video = document.getElementById('meuVideo');
-    const progressBar = document.querySelector('#progressBar div');
-    const prizeElements = document.querySelectorAll('.prize');
+const questionEl = document.getElementById('question');
+const answersEl = document.getElementById('answers');
+const quizContainer = document.getElementById('quizContainer');
+const errorMessage = document.getElementById('errorMessage');
+const video = document.getElementById('meuVideo');
+const progressBar = document.querySelector('#progressBar div');
+const prizeElements = document.querySelectorAll('.prize');
 
-    function showQuestion() {
-      const q = quiz[current];
-      questionEl.textContent = q.q;
-      answersEl.innerHTML = '';
-      errorMessage.textContent = ''; // limpa erro antigo
+function showQuestion() {
+  const q = quiz[current];
+  questionEl.textContent = q.q;
+  answersEl.innerHTML = '';
+  errorMessage.textContent = '';
 
-      q.a.forEach((ans, i) => {
-        const btn = document.createElement('button');
-        btn.textContent = ans;
-        btn.className = 'answer-btn';
-        btn.disabled = false;
-        btn.addEventListener('click', () => checkAnswer(i));
-        answersEl.appendChild(btn);
-      });
+  q.a.forEach((ans, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = ans;
+    btn.className = 'answer-btn';
+    btn.disabled = false;
+    btn.addEventListener('click', () => checkAnswer(i));
+    answersEl.appendChild(btn);
+  });
 
-      setTimeout(() => {
-        const active = document.activeElement;
-        if (active && active.classList.contains('answer-btn')) active.blur();
-      }, 50);
+  // Remove focus de todos os botões (resolve bug iOS)
+  const buttons = document.querySelectorAll('.answer-btn');
+  buttons.forEach(btn => {
+    btn.blur();
+    btn.classList.remove('correct', 'wrong'); // limpa classes antigas
+  });
+}
+
+function updateProgress() {
+  const percent = (score / quiz.length) * 100;
+  progressBar.style.width = percent + '%';
+
+  prizeElements.forEach(prize => {
+    const prizeScore = parseInt(prize.dataset.score);
+    const positionPercent = (prizeScore / quiz.length) * 100;
+    prize.style.left = `calc(${positionPercent}% - 12px)`;
+
+    if (score === prizeScore) {
+      prize.classList.add('active');
+      mostrarPopup(prize.querySelector('.tooltip').textContent);
     }
+  });
+}
 
-    function updateProgress() {
-      const percent = (score / quiz.length) * 100;
-      progressBar.style.width = percent + '%';
-
-      prizeElements.forEach(prize => {
-        const prizeScore = parseInt(prize.dataset.score);
-        const positionPercent = (prizeScore / quiz.length) * 100;
-        prize.style.left = `calc(${positionPercent}% - 12px)`;
-
-        if (score === prizeScore) {
-          prize.classList.add('active');
-          mostrarPopup(prize.querySelector('.tooltip').textContent);
-        }
-      });
+function checkAnswer(i) {
+  const buttons = document.querySelectorAll('.answer-btn');
+  buttons.forEach((btn, index) => {
+    if (index === i) {
+      if (i === quiz[current].correct) btn.classList.add('correct');
+      else btn.classList.add('wrong');
+    } else {
+      btn.classList.remove('correct','wrong');
     }
+  });
 
-    function checkAnswer(i) {
-      const buttons = document.querySelectorAll('.answer-btn');
-      buttons.forEach((btn, index) => {
-        if (index === i) {
-          if (i === quiz[current].correct) btn.classList.add('correct');
-          else btn.classList.add('wrong');
-        } else {
-          btn.classList.remove('correct','wrong');
-        }
-      });
-
-      if (i === quiz[current].correct) {
-        score++;
-        updateProgress();
-        buttons.forEach(btn => btn.disabled = true);
-        current++;
-        setTimeout(() => {
-          if (current < quiz.length) showQuestion();
-          else {
-            quizContainer.style.display = 'none';
-            video.style.display = 'block';
-          }
-        }, 400);
-      } else {
-        showError("Ops! Está errado. Tenta outra vez 💖");
-        buttons.forEach(btn => btn.disabled = false); // REATIVA para tentar outra vez
-      }
-    }
-
-    function showError(msg) {
-      errorMessage.textContent = msg;
-      errorMessage.classList.add('show', 'shake');
-      setTimeout(() => errorMessage.classList.remove('shake'), 300);
-    }
-
-    function mostrarPopup(texto) {
-      document.getElementById('popupText').textContent = texto;
-      document.getElementById('popupPremio').style.display = 'block';
-    }
-
-    function fecharPopup() {
-      document.getElementById('popupPremio').style.display = 'none';
-    }
-
+  if (i === quiz[current].correct) {
+    score++;
     updateProgress();
-    showQuestion();
+    buttons.forEach(btn => btn.disabled = true);
+    current++;
+    setTimeout(() => {
+      if (current < quiz.length) showQuestion();
+      else {
+        quizContainer.style.display = 'none';
+        video.style.display = 'block';
+      }
+    }, 400);
+  } else {
+    showError("Ops! Está errado. Tenta outra vez 💖");
+    buttons.forEach(btn => btn.disabled = false); // reativa para tentar outra vez
+  }
+}
+
+function showError(msg) {
+  errorMessage.textContent = msg;
+  errorMessage.classList.add('show', 'shake');
+  setTimeout(() => errorMessage.classList.remove('shake'), 300);
+}
+
+function mostrarPopup(texto) {
+  document.getElementById('popupText').textContent = texto;
+  document.getElementById('popupPremio').style.display = 'block';
+}
+
+function fecharPopup() {
+  document.getElementById('popupPremio').style.display = 'none';
+}
+
+updateProgress();
+showQuestion();
+</script>
+
   </script>
 </body>
 </html>
