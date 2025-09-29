@@ -64,39 +64,8 @@ p { font-size: 1.2rem; color: #555; max-width: 600px; margin: 0 auto 40px auto; 
   transition: opacity 0.3s, transform 0.5s;
   cursor: default;
 }
-.prize.active .tooltip {
-  opacity: 1;
-  transform: translateX(-50%) translateY(-15px) scale(1.2);
-  background: #ff4b6e;
-  box-shadow: 0 0 15px rgba(255, 75, 110, 0.7);
-  animation: bounce 0.6s;
-}
-
-/* Animação de bounce */
-@keyframes bounce {
-  0%   { transform: translateX(-50%) translateY(-5px) scale(1); }
-  30%  { transform: translateX(-50%) translateY(-20px) scale(1.2); }
-  50%  { transform: translateX(-50%) translateY(-10px) scale(1.1); }
-  70%  { transform: translateX(-50%) translateY(-15px) scale(1.15); }
-  100% { transform: translateX(-50%) translateY(-15px) scale(1.2); }
-}
 .prize .tooltip {
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #ff4b6e;
-  color: #fff;
-  padding: 2px 6px;
-  border-radius: 5px;
-  font-size: 0.8rem;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.3s, transform 0.3s;
-}
-.prize.active .tooltip {
-  opacity: 1;
-  transform: translateX(-50%) translateY(-10px);
+  display: none; /* escondemos o tooltip, só aparece via popup */
 }
 
 #quizContainer {
@@ -164,6 +133,41 @@ video {
 video:hover { transform: scale(1.03); }
 
 footer { margin-top: 50px; font-size: 0.9rem; color: #666; text-align: center; }
+
+/* Popup de prémio */
+#popupPremio {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: #fff;
+  border-radius: 15px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+  z-index: 1000;
+  display: none;
+  animation: fadeIn 0.3s forwards;
+}
+#popupPremio h2 {
+  color: #ff4b6e;
+  margin-bottom: 10px;
+}
+#popupPremio button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #ff9ecf;
+  color: #fff;
+  cursor: pointer;
+}
+#popupPremio button:hover { background: #ff4b6e; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
 </style>
 </head>
 <body>
@@ -192,6 +196,13 @@ footer { margin-top: 50px; font-size: 0.9rem; color: #666; text-align: center; }
 </video>
 
 <footer>Feito com carinho 💌</footer>
+
+<!-- Popup -->
+<div id="popupPremio">
+  <h2>🎉 Parabéns!</h2>
+  <p id="popupText"></p>
+  <button onclick="fecharPopup()">Fechar</button>
+</div>
 
 <script>
 const quiz = [
@@ -236,8 +247,11 @@ function updateProgress() {
     const prizeScore = parseInt(prize.dataset.score);
     const positionPercent = (prizeScore / quiz.length) * 100;
     prize.style.left = `calc(${positionPercent}% - 12px)`;
-    if (score >= prizeScore) {
+
+    // Só mostra popup quando o score atinge exatamente o prémio
+    if (score === prizeScore) {
       prize.classList.add('active');
+      mostrarPopup(prize.querySelector('.tooltip').textContent);
     }
   });
 }
@@ -254,9 +268,9 @@ function checkAnswer(i) {
     } else {
       let msg = '';
       switch (i) {
-        case 1: msg = "Às vezes só, mas ainda não é a certa"; break; // "Os dois"
-        case 2: msg = "Vá, não somos assim tão seca"; break;      // "Nenhum"
-        case 3: msg = "Looooooooool, escolhe lá a certa bro"; break; // "Bia"
+        case 1: msg = "Às vezes só, mas ainda não é a certa"; break;
+        case 2: msg = "Vá, não somos assim tão seca"; break;
+        case 3: msg = "Looooooooool, escolhe lá a certa bro"; break;
         default: msg = "Ops! Está errado. Tenta outra vez 💖";
       }
       showError(msg);
@@ -284,6 +298,15 @@ function showError(msg) {
   errorMessage.textContent = msg;
   errorMessage.classList.add('show', 'shake');
   setTimeout(() => errorMessage.classList.remove('shake'), 300);
+}
+
+function mostrarPopup(texto) {
+  document.getElementById('popupText').textContent = texto;
+  document.getElementById('popupPremio').style.display = 'block';
+}
+
+function fecharPopup() {
+  document.getElementById('popupPremio').style.display = 'none';
 }
 
 // Inicializa
