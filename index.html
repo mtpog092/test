@@ -273,27 +273,28 @@ const progressBar = document.querySelector('#progressBar div');
 const prizeElements = document.querySelectorAll('.prize');
 
 function showQuestion() {
-  const q = quiz[current];
-  questionEl.textContent = q.q;
-  answersEl.innerHTML = '';
-  errorMessage.textContent = '';
+    const q = quiz[current];
+    questionEl.textContent = q.q;
 
-  q.a.forEach((ans, i) => {
-    const btn = document.createElement('button');
-    btn.textContent = ans;
-    btn.className = 'answer-btn';
-    btn.disabled = false;
-    btn.addEventListener('click', () => checkAnswer(i));
-    answersEl.appendChild(btn);
-  });
+    // Limpa os botões antigos e remove shake do erro
+    answersEl.innerHTML = '';
+    errorMessage.textContent = '';
+    errorMessage.classList.remove('shake');
 
-  // Remove focus de todos os botões (resolve bug iOS)
-  const buttons = document.querySelectorAll('.answer-btn');
-  buttons.forEach(btn => {
-    btn.blur();
-    btn.classList.remove('correct', 'wrong'); // limpa classes antigas
-  });
+    q.a.forEach((ans, i) => {
+        const btn = document.createElement('button');
+        btn.textContent = ans;
+        btn.className = 'answer-btn';
+        btn.disabled = false;
+
+        btn.addEventListener('click', () => checkAnswer(i));
+        answersEl.appendChild(btn);
+    });
+
+    // Remove foco automático para evitar hover/focus no iPhone
+    setTimeout(() => document.activeElement.blur(), 50);
 }
+
 
 function updateProgress() {
   const percent = (score / quiz.length) * 100;
@@ -312,32 +313,38 @@ function updateProgress() {
 }
 
 function checkAnswer(i) {
-  const buttons = document.querySelectorAll('.answer-btn');
-  buttons.forEach((btn, index) => {
-    if (index === i) {
-      if (i === quiz[current].correct) btn.classList.add('correct');
-      else btn.classList.add('wrong');
-    } else {
-      btn.classList.remove('correct','wrong');
-    }
-  });
+    const buttons = document.querySelectorAll('.answer-btn');
 
-  if (i === quiz[current].correct) {
-    score++;
-    updateProgress();
-    buttons.forEach(btn => btn.disabled = true);
-    current++;
-    setTimeout(() => {
-      if (current < quiz.length) showQuestion();
-      else {
-        quizContainer.style.display = 'none';
-        video.style.display = 'block';
-      }
-    }, 400);
-  } else {
-    showError("Ops! Está errado. Tenta outra vez 💖");
-    buttons.forEach(btn => btn.disabled = false); // reativa para tentar outra vez
-  }
+    buttons.forEach((btn, index) => {
+        btn.classList.remove('correct', 'wrong'); // Remove todas as classes antes
+        if (index === i) {
+            if (i === quiz[current].correct) {
+                btn.classList.add('correct');
+            } else {
+                btn.classList.add('wrong');
+            }
+        }
+    });
+
+    if (i === quiz[current].correct) {
+        score++;
+        updateProgress();
+        buttons.forEach(btn => btn.disabled = true);
+        current++;
+
+        setTimeout(() => {
+            if (current < quiz.length) {
+                showQuestion();
+            } else {
+                quizContainer.style.display = 'none';
+                video.style.display = 'block';
+            }
+        }, 400);
+
+    } else {
+        showError("Ops! Está errado. Tenta outra vez 💖");
+        buttons.forEach(btn => btn.disabled = false);
+    }
 }
 
 function showError(msg) {
