@@ -234,7 +234,10 @@ function showQuestion() {
     const btn = document.createElement('button');
     btn.textContent = ans;
     btn.className = 'answer-btn';
-    btn.addEventListener('click', () => checkAnswer(i));
+    btn.addEventListener('click', (e) => {
+  checkAnswer(i);
+  e.target.blur(); // remove o foco no telemóvel
+});
     answersEl.appendChild(btn);
   });
 }
