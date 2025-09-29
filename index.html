@@ -1,320 +1,368 @@
 <!doctype html>
 <html lang="pt">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>2 Anos com a maior chatinha</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap');
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2 Anos com a maior chatinha</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap');
 
-* { box-sizing: border-box; margin:0; padding:0; }
-body {
-  font-family: 'Montserrat', sans-serif;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #ffe6f0, #e6f7ff);
-  color: #222;
-  padding: 20px;
-  transition: background 0.5s ease;
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-header { text-align: center; margin-bottom: 40px; }
-h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 3rem;
-  color: #ff4b6e;
-  margin-bottom: 10px;
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%,100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
+    body {
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ffe6f0, #e6f7ff);
+      color: #222;
+      padding: 20px;
+      transition: background 0.5s ease;
+    }
 
-p { font-size: 1.2rem; color: #555; max-width: 600px; margin: 0 auto 40px auto; text-align: center; }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
 
-#progressContainer {
-  width: 100%;
-  max-width: 500px;
-  height: 40px;
-  position: relative;
-  margin-bottom: 30px;
-}
-#progressBar {
-  width: 100%;
-  height: 10px;
-  background: #eee;
-  border-radius: 5px;
-  overflow: hidden;
-  position: relative;
-}
-#progressBar div {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #ff9ecf, #ff4b6e);
-  transition: width 0.5s ease;
-}
-.prize {
-  position: absolute;
-  top: -20px;
-  font-size: 1.5rem;
-  transition: opacity 0.3s, transform 0.5s;
-  cursor: default;
-}
-.prize .tooltip {
-  display: none; /* escondemos o tooltip, só aparece via popup */
-}
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: #ff4b6e;
+      margin-bottom: 10px;
+      animation: pulse 2s infinite;
+    }
 
-#quizContainer {
-  background: #fff0f5;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  max-width: 500px;
-  width: 100%;
-  text-align: center;
-  margin-bottom: 40px;
-}
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
 
-.question { font-size: 1.2rem; margin-bottom: 20px; }
-.answer-btn {
-  display: block;
-  margin: 10px auto;
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: #ff9ecf;
-  color: #fff;
-}
-.answer-btn:hover { background-color: #ff4b6e; transform: scale(1.05); }
+    p {
+      font-size: 1.2rem;
+      color: #555;
+      max-width: 600px;
+      margin: 0 auto 40px auto;
+      text-align: center;
+    }
 
-/* Mensagem de erro */
-#errorMessage {
-  color: #ff4b6e;
-  font-weight: bold;
-  margin-top: 10px;
-  min-height: 1.2em;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-#errorMessage.show {
-  opacity: 1;
-}
+    #progressContainer {
+      width: 100%;
+      max-width: 500px;
+      height: 40px;
+      position: relative;
+      margin-bottom: 30px;
+    }
 
-/* Animação de shake */
-@keyframes shake {
-  0% { transform: translateX(0); }
-  20% { transform: translateX(-5px); }
-  40% { transform: translateX(5px); }
-  60% { transform: translateX(-5px); }
-  80% { transform: translateX(5px); }
-  100% { transform: translateX(0); }
-}
-#errorMessage.shake {
-  animation: shake 0.3s;
-}
+    #progressBar {
+      width: 100%;
+      height: 10px;
+      background: #eee;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+    }
 
-video {
-  width: 100%;
-  max-width: 700px;
-  border-radius: 12px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-  background: #000;
-  display: none;
-  margin-top: 20px;
-  transition: transform 0.3s ease;
-}
-video:hover { transform: scale(1.03); }
+    #progressBar div {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff9ecf, #ff4b6e);
+      transition: width 0.5s ease;
+    }
 
-footer { margin-top: 50px; font-size: 0.9rem; color: #666; text-align: center; }
+    .prize {
+      position: absolute;
+      top: -20px;
+      font-size: 1.5rem;
+      transition: opacity 0.3s, transform 0.5s;
+      cursor: default;
+    }
 
-/* Popup de prémio */
-#popupPremio {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.8);
-  background: #fff;
-  border-radius: 15px;
-  padding: 30px;
-  text-align: center;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-  z-index: 1000;
-  display: none;
-  animation: fadeIn 0.3s forwards;
-}
-#popupPremio h2 {
-  color: #ff4b6e;
-  margin-bottom: 10px;
-}
-#popupPremio button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  background: #ff9ecf;
-  color: #fff;
-  cursor: pointer;
-}
-#popupPremio button:hover { background: #ff4b6e; }
+    .prize .tooltip {
+      display: none; /* escondemos o tooltip, só aparece via popup */
+    }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-}
-</style>
+    #quizContainer {
+      background: #fff0f5;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .question {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .answer-btn {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background-color: #ff9ecf;
+      color: #fff;
+    }
+
+    .answer-btn:hover {
+      background-color: #ff4b6e;
+      transform: scale(1.05);
+    }
+
+    /* Mensagem de erro */
+    #errorMessage {
+      color: #ff4b6e;
+      font-weight: bold;
+      margin-top: 10px;
+      min-height: 1.2em;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    #errorMessage.show {
+      opacity: 1;
+    }
+
+    /* Animação de shake */
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      20% { transform: translateX(-5px); }
+      40% { transform: translateX(5px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+      100% { transform: translateX(0); }
+    }
+
+    #errorMessage.shake {
+      animation: shake 0.3s;
+    }
+
+    video {
+      width: 100%;
+      max-width: 700px;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      background: #000;
+      display: none;
+      margin-top: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    video:hover {
+      transform: scale(1.03);
+    }
+
+    footer {
+      margin-top: 50px;
+      font-size: 0.9rem;
+      color: #666;
+      text-align: center;
+    }
+
+    /* Popup de prémio */
+    #popupPremio {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+      z-index: 1000;
+      display: none;
+      animation: fadeIn 0.3s forwards;
+    }
+
+    #popupPremio h2 {
+      color: #ff4b6e;
+      margin-bottom: 10px;
+    }
+
+    #popupPremio button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #ff9ecf;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #popupPremio button:hover {
+      background: #ff4b6e;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+      to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <h1>2 Anos com a maior chatinha</h1>
-  <p>Quiz especial sobre nós! Ganhas prémios conforme acertas 💖</p>
-</header>
+  <header>
+    <h1>2 Anos com a maior chatinha</h1>
+    <p>Quiz especial sobre nós! Ganhas prémios conforme acertas 💖</p>
+  </header>
 
-<!-- Progress bar com prêmios -->
-<div id="progressContainer">
-  <div id="progressBar"><div></div></div>
-  <span class="prize" data-score="2">🎁<span class="tooltip">Ganhaste um abraço</span></span>
-  <span class="prize" data-score="4">🎉<span class="tooltip">Ganhaste um beijinho</span></span>
-  <span class="prize" data-score="6">🏆<span class="tooltip">Prémio Final</span></span>
-</div>
+  <!-- Progress bar com prêmios -->
+  <div id="progressContainer">
+    <div id="progressBar"><div></div></div>
+    <span class="prize" data-score="2">🎁<span class="tooltip">Ganhaste um abraço</span></span>
+    <span class="prize" data-score="4">🎉<span class="tooltip">Ganhaste um beijinho</span></span>
+    <span class="prize" data-score="6">🏆<span class="tooltip">Prémio Final</span></span>
+  </div>
 
-<div id="quizContainer">
-  <div class="question" id="question">Pergunta aparecerá aqui</div>
-  <div id="answers"></div>
-  <div id="errorMessage"></div>
-</div>
+  <div id="quizContainer">
+    <div class="question" id="question">Pergunta aparecerá aqui</div>
+    <div id="answers"></div>
+    <div id="errorMessage"></div>
+  </div>
 
-<video id="meuVideo" controls playsinline preload="metadata" poster="poster.jpg">
-  <source src="aiai.mp4" type="video/mp4">
-  O teu navegador não suporta vídeo HTML5. <a href="aiai.mp4">Descarrega o vídeo aqui</a>.
-</video>
+  <video id="meuVideo" controls playsinline preload="metadata" poster="poster.jpg">
+    <source src="aiai.mp4" type="video/mp4">
+    O teu navegador não suporta vídeo HTML5. <a href="aiai.mp4">Descarrega o vídeo aqui</a>.
+  </video>
 
-<footer>Feito com carinho 💌</footer>
+  <footer>Feito com carinho 💌</footer>
 
-<!-- Popup -->
-<div id="popupPremio">
-  <h2>🎉 Parabéns!</h2>
-  <p id="popupText"></p>
-  <button onclick="fecharPopup()">Fechar</button>
-</div>
+  <!-- Popup -->
+  <div id="popupPremio">
+    <h2>🎉 Parabéns!</h2>
+    <p id="popupText"></p>
+    <button onclick="fecharPopup()">Fechar</button>
+  </div>
 
-<script>
-const quiz = [
-  {q: "Onde foi o nosso primeiro encontro?", a: ["Num café","No cinema","Ao ar livre","Num restaurante"], correct: 2},
-  {q: "Quem é o mais chato da relação?", a: ["Bia","Ruben","Os dois","Nenhum"], correct:0},
-  {q: "Em que ano começámos a namorar", a: ["2021","2022","2023","2024"], correct: 2},
-  {q: "Quem é o mais ciumento?", a: ["Nenhum","Os dois","Bia","Ruben"], correct: 2}, 
-  {q: "Qual foi a nossa primeira viagem?", a: ["Viena","Tailândia","Roma","Barcelona"], correct: 3},
-  {q: "Quem é o mais engraçado?", a: ["Ruben","Os dois","Nenhum","Bia"], correct: 0}
-];
+  <script>
+    const quiz = [
+      { q: "Onde foi o nosso primeiro encontro?", a: ["Num café","No cinema","Ao ar livre","Num restaurante"], correct: 2 },
+      { q: "Quem é o mais chato da relação?", a: ["Bia","Ruben","Os dois","Nenhum"], correct: 0 },
+      { q: "Em que ano começámos a namorar", a: ["2021","2022","2023","2024"], correct: 2 },
+      { q: "Quem é o mais ciumento?", a: ["Nenhum","Os dois","Bia","Ruben"], correct: 2 },
+      { q: "Qual foi a nossa primeira viagem?", a: ["Viena","Tailândia","Roma","Barcelona"], correct: 3 },
+      { q: "Quem é o mais engraçado?", a: ["Ruben","Os dois","Nenhum","Bia"], correct: 0 }
+    ];
 
-let current = 0;
-let score = 0;
+    let current = 0;
+    let score = 0;
 
-const questionEl = document.getElementById('question');
-const answersEl = document.getElementById('answers');
-const quizContainer = document.getElementById('quizContainer');
-const errorMessage = document.getElementById('errorMessage');
-const video = document.getElementById('meuVideo');
-const progressBar = document.querySelector('#progressBar div');
-const prizeElements = document.querySelectorAll('.prize');
+    const questionEl = document.getElementById('question');
+    const answersEl = document.getElementById('answers');
+    const quizContainer = document.getElementById('quizContainer');
+    const errorMessage = document.getElementById('errorMessage');
+    const video = document.getElementById('meuVideo');
+    const progressBar = document.querySelector('#progressBar div');
+    const prizeElements = document.querySelectorAll('.prize');
 
-function showQuestion() {
-  const q = quiz[current];
-  questionEl.textContent = q.q;
-  answersEl.innerHTML = '';
-  errorMessage.classList.remove('show');
-  q.a.forEach((ans, i) => {
-    const btn = document.createElement('button');
-    btn.textContent = ans;
-    btn.className = 'answer-btn';
-    btn.addEventListener('click', (e) => {
-  checkAnswer(i);
-  e.target.blur(); // remove o foco no telemóvel
-});
-    answersEl.appendChild(btn);
-  });
-}
+    function showQuestion() {
+      const q = quiz[current];
+      questionEl.textContent = q.q;
+      answersEl.innerHTML = '';
+      errorMessage.classList.remove('show');
 
-function updateProgress() {
-  const percent = (score / quiz.length) * 100;
-  progressBar.style.width = percent + '%';
-  
-  prizeElements.forEach(prize => {
-    const prizeScore = parseInt(prize.dataset.score);
-    const positionPercent = (prizeScore / quiz.length) * 100;
-    prize.style.left = `calc(${positionPercent}% - 12px)`;
+      q.a.forEach((ans, i) => {
+        const btn = document.createElement('button');
+        btn.textContent = ans;
+        btn.className = 'answer-btn';
+        btn.addEventListener('click', (e) => {
+          checkAnswer(i);
+          e.target.blur(); // remove o foco no telemóvel
+        });
+        answersEl.appendChild(btn);
+      });
 
-    // Só mostra popup quando o score atinge exatamente o prémio
-    if (score === prizeScore) {
-      prize.classList.add('active');
-      mostrarPopup(prize.querySelector('.tooltip').textContent);
+      // Forçar remoção de foco residual
+      setTimeout(() => {
+        document.activeElement.blur();
+      }, 50);
     }
-  });
-}
 
-function checkAnswer(i) {
-  // Última pergunta personalizada
-  if (current === quiz.length - 1) {
-    if (i === quiz[current].correct) {
-      score++;
-      updateProgress();
-      quizContainer.style.display = 'none';
-      video.style.display = 'block';
-      return;
-    } else {
-      let msg = '';
-      switch (i) {
-        case 1: msg = "Às vezes só, mas ainda não é a certa"; break;
-        case 2: msg = "Vá, não somos assim tão seca"; break;
-        case 3: msg = "Looooooooool, escolhe lá a certa bro"; break;
-        default: msg = "Ops! Está errado. Tenta outra vez 💖";
+    function updateProgress() {
+      const percent = (score / quiz.length) * 100;
+      progressBar.style.width = percent + '%';
+
+      prizeElements.forEach(prize => {
+        const prizeScore = parseInt(prize.dataset.score);
+        const positionPercent = (prizeScore / quiz.length) * 100;
+        prize.style.left = `calc(${positionPercent}% - 12px)`;
+
+        if (score === prizeScore) {
+          prize.classList.add('active');
+          mostrarPopup(prize.querySelector('.tooltip').textContent);
+        }
+      });
+    }
+
+    function checkAnswer(i) {
+      // Última pergunta personalizada
+      if (current === quiz.length - 1) {
+        if (i === quiz[current].correct) {
+          score++;
+          updateProgress();
+          quizContainer.style.display = 'none';
+          video.style.display = 'block';
+          return;
+        } else {
+          let msg = '';
+          switch (i) {
+            case 1: msg = "Às vezes só, mas ainda não é a certa"; break;
+            case 2: msg = "Vá, não somos assim tão seca"; break;
+            case 3: msg = "Looooooooool, escolhe lá a certa bro"; break;
+            default: msg = "Ops! Está errado. Tenta outra vez 💖";
+          }
+          showError(msg);
+          return;
+        }
       }
-      showError(msg);
-      return;
-    }
-  }
 
-  // Perguntas normais
-  if (i === quiz[current].correct) {
-    score++;
+      // Perguntas normais
+      if (i === quiz[current].correct) {
+        score++;
+        updateProgress();
+        current++;
+        if (current < quiz.length) {
+          showQuestion();
+        } else {
+          quizContainer.style.display = 'none';
+          video.style.display = 'block';
+        }
+      } else {
+        showError("Ops! Está errado. Tenta outra vez 💖");
+      }
+    }
+
+    function showError(msg) {
+      errorMessage.textContent = msg;
+      errorMessage.classList.add('show', 'shake');
+      setTimeout(() => errorMessage.classList.remove('shake'), 300);
+    }
+
+    function mostrarPopup(texto) {
+      document.getElementById('popupText').textContent = texto;
+      document.getElementById('popupPremio').style.display = 'block';
+    }
+
+    function fecharPopup() {
+      document.getElementById('popupPremio').style.display = 'none';
+    }
+
+    // Inicializa
     updateProgress();
-    current++;
-    if (current < quiz.length) {
-      showQuestion();
-    } else {
-      quizContainer.style.display = 'none';
-      video.style.display = 'block';
-    }
-  } else {
-    showError("Ops! Está errado. Tenta outra vez 💖");
-  }
-}
-
-function showError(msg) {
-  errorMessage.textContent = msg;
-  errorMessage.classList.add('show', 'shake');
-  setTimeout(() => errorMessage.classList.remove('shake'), 300);
-}
-
-function mostrarPopup(texto) {
-  document.getElementById('popupText').textContent = texto;
-  document.getElementById('popupPremio').style.display = 'block';
-}
-
-function fecharPopup() {
-  document.getElementById('popupPremio').style.display = 'none';
-}
-
-// Inicializa
-updateProgress();
-showQuestion();
-</script>
+    showQuestion();
+  </script>
 </body>
 </html>
